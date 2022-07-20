@@ -1,5 +1,7 @@
 const express = require("express");
 const expressLayouts = require('express-ejs-layouts');
+const db = require('./config/mongoose');
+const User = require('./models/user');
 const port = 5000;
 
 const app = express();
@@ -13,6 +15,7 @@ app.use(expressLayouts);
 app.set('layout extractStyles', true);
 app.set('layout extractScripts', true);
 app.set('layout', './layouts/layout');
+
 app.use('/', require('./routes'));
 
 

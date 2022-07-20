@@ -8,4 +8,7 @@ router.get('/', function(req, res){
 });
 router.get('/profile', user_controller.profile);
 
+router.get('/sign-in', user_controller.sign_in);
+router.get('/sign-up', user_controller.sign_up);
+
 module.exports = router;
