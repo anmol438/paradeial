@@ -2,13 +2,17 @@ const express = require("express");
 const expressLayouts = require('express-ejs-layouts');
 const db = require('./config/mongoose');
 const User = require('./models/user');
+const cookieParser = require('cookie-parser');
 const port = 5000;
 
 const app = express();
 
+app.use(express.urlencoded());
+
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
+app.use(cookieParser());
 app.use(express.static('./assets'));
 
 app.use(expressLayouts);
