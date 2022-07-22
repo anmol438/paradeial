@@ -58,3 +58,16 @@ module.exports.create = function (req, res) {
 module.exports.create_session = function (req, res) {
   return res.redirect("/users/profile");
 };
+
+module.exports.destroy_session = function(req, res){
+    console.log("logging out...");
+    req.logout(function(err){
+        
+        if(err){
+            console.log("Error in logging out");
+            return;
+        }
+        console.log("logged out")
+    });
+    return res.redirect('/');
+}

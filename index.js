@@ -7,7 +7,7 @@ const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const passport = require("passport");
 const passportLocal = require("./config/passport_local_strategy");
-const MongoStore = require("connect-mongo");
+const MongoStore = require("connect-mongodb-session")(session);
 
 const port = 5000;
 
@@ -36,12 +36,15 @@ app.use(
     },
     store: new MongoStore(
       {
-        mongoUrl: 'mongodb://localhost/codeial-database',
+        uri: 'mongodb://localhost/codeial-database',
         autoRemove: 'disabled'
         
       },
       function (err) {
-        console.log(err || "connect-monogdb setup is OK");
+        if(err){
+        console.log('connect-mongo -->', err);
+        }
+        console.log("store up...");
       }
     ),
   })
