@@ -9,3 +9,5 @@ db.on('error', console.error.bind(console, "Error in connecting to Codial Databa
 db.once('open', function(){
     console.log("Successfully connected to Codial Database :: MongoDB");
 });
+
+module.exports = db;
