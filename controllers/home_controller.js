@@ -14,6 +14,12 @@ module.exports.home = function (req, res) {
 
   Post.find({})
     .populate("user")
+    .populate({
+      path:'comments',
+      populate:{
+        path:'user'
+      }
+    })
     .exec(function (err, posts) {
         // console.log(posts[0].user)
       return res.render("home", {
