@@ -8,6 +8,8 @@ router.get("/", function (req, res) {
   return res.end("<h1> Users </h1>");
 });
 router.get("/profile",passport.check_authentication, user_controller.profile);
+router.post("/update",passport.check_authentication, user_controller.update);
+
 
 router.get("/sign-in", user_controller.sign_in);
 router.get("/sign-up", user_controller.sign_up);

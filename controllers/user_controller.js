@@ -3,10 +3,31 @@ const passport = require("passport");
 
 module.exports.profile = function (req, res) {
   // console.log('******',req.user);
-  res.render("user_profile", {
-    title: "Profile",
-  });
+  let user_id = req.query.user_id;
+
+  User.findById(user_id, function(err, user){
+    res.render("user_profile", {
+      title: "Profile",
+      profile_user:user
+    });
+  })
+  
 };
+
+module.exports.update = function(req, res){
+  if(req.user.id == req.query.user_id){
+    User.findByIdAndUpdate(req.query.user_id, req.body, function(err, user){
+      if(err){
+        console.log("Error in updating profile");
+        return;
+      }
+      console.log("Profile Updated");
+      return res.redirect('back');
+    })
+  }else{
+    return res.status(401).send("Unathorized Access");
+  }
+}
 
 module.exports.sign_in = function (req, res) {
   if (req.isAuthenticated()) {
