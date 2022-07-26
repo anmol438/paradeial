@@ -1,4 +1,5 @@
 const Post = require('../models/post');
+const Comment = require('../models/comment');
 
 module.exports.create = function(req,res){
     console.log('creating a post...');
@@ -14,4 +15,24 @@ module.exports.create = function(req,res){
         console.log("Post created -->", post);
         return res.redirect('back');
     })
-}   
+}
+
+module.exports.destroy = function(req, res){
+    Post.findById(req.params.id, function(err, post){
+
+        if(err){
+            console.log("Cannot find post while deleting");
+            return;
+        }
+
+        if(req.user.id == post.user){
+            Comment.deleteMany({_id:post.comments}, function(err){});
+            post.remove();
+            return res.redirect('back');
+        }else{
+            console.log('not authorised');
+            return res.redirect('back');
+        }
+
+    });
+}
