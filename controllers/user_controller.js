@@ -5,29 +5,28 @@ module.exports.profile = function (req, res) {
   // console.log('******',req.user);
   let user_id = req.query.user_id;
 
-  User.findById(user_id, function(err, user){
+  User.findById(user_id, function (err, user) {
     res.render("user_profile", {
       title: "Profile",
-      profile_user:user
+      profile_user: user,
     });
-  })
-  
+  });
 };
 
-module.exports.update = function(req, res){
-  if(req.user.id == req.query.user_id){
-    User.findByIdAndUpdate(req.query.user_id, req.body, function(err, user){
-      if(err){
+module.exports.update = function (req, res) {
+  if (req.user.id == req.query.user_id) {
+    User.findByIdAndUpdate(req.query.user_id, req.body, function (err, user) {
+      if (err) {
         console.log("Error in updating profile");
         return;
       }
       console.log("Profile Updated");
-      return res.redirect('back');
-    })
-  }else{
+      return res.redirect("back");
+    });
+  } else {
     return res.status(401).send("Unathorized Access");
   }
-}
+};
 
 module.exports.sign_in = function (req, res) {
   if (req.isAuthenticated()) {
@@ -75,39 +74,39 @@ module.exports.create = async function (req, res) {
   //   }
   // });
 
-
   ////////////////////
   try {
     let user = await User.findOne({ email: req.body.email });
 
     if (!user) {
-      user = await User.create(req.body)
+      user = await User.create(req.body);
       console.log("***** user created", user);
       return res.redirect("/users/sign-in");
-
     } else {
       console.log("User already exist");
       return res.redirect("back");
     }
   } catch (err) {
-    console.log("Error --->  ",  err);
+    console.log("Error --->  ", err);
   }
-  
 };
 
 module.exports.create_session = function (req, res) {
+  req.flash("success", "Logged in successfullly");
   return res.redirect("/");
 };
 
-module.exports.destroy_session = function(req, res){
-    console.log("logging out...");
-    req.logout(function(err){
-        
-        if(err){
-            console.log("Error in logging out");
-            return;
-        }
-        console.log("logged out")
-    });
-    return res.redirect('/');
-}
+module.exports.destroy_session = function (req, res) {
+  console.log("logging out...");
+  req.logout(function (err) {
+    if (err) {
+      console.log("Error in logging out");
+      return;
+    }
+    console.log("logged out");
+    
+  });
+  req.flash("success", "You have logged out!");
+
+  return res.redirect("/");
+};

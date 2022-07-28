@@ -12,7 +12,14 @@
 </head>
 <body>
     <%- include('../partials/_header.ejs'); %> 
-    <%- body %> 
+
+    <% if(locals.flash.success && locals.flash.success.length>0){ %> 
+        <h5>
+            <%= locals.flash.success %> 
+        </h5>
+    <% } %> 
+
+    <%- body -%> 
     <%- include('../partials/_footer.ejs'); %> 
 
     <%- script %> 
