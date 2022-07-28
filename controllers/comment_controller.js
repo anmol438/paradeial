@@ -37,6 +37,7 @@ module.exports.create = async function (req, res) {
 
       post.comments.push(comment);
       post.save();
+      req.flash('success', 'Comment added');
     }
 
     return res.redirect("/");
@@ -75,6 +76,7 @@ module.exports.destroy = async function (req, res) {
         $pull: { comments: comment._id },
       });
       comment.remove();
+      req.flash('success', "Comment deleted");
     } else {
       console.log("Not authorized");
     }

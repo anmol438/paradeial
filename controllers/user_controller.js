@@ -21,6 +21,7 @@ module.exports.update = function (req, res) {
         return;
       }
       console.log("Profile Updated");
+      req.flash('success', 'Profile updated!')
       return res.redirect("back");
     });
   } else {
@@ -30,7 +31,7 @@ module.exports.update = function (req, res) {
 
 module.exports.sign_in = function (req, res) {
   if (req.isAuthenticated()) {
-    return res.redirect("/users/profile");
+    return res.redirect("/");
   }
   return res.render("user_sign_in", {
     title: "Codeial | Sign In",
@@ -50,6 +51,7 @@ module.exports.create = async function (req, res) {
   console.log("signing up...");
   if (req.body.password != req.body.confirm_password) {
     console.log("Password is not same");
+    req.flash('error', 'Password does not match!');
     return res.redirect("back");
   }
 
@@ -80,13 +82,16 @@ module.exports.create = async function (req, res) {
 
     if (!user) {
       user = await User.create(req.body);
+      req.flash('success', 'Sign Up successfull');
       console.log("***** user created", user);
       return res.redirect("/users/sign-in");
     } else {
+      req.flash('error', "Username already taken");
       console.log("User already exist");
       return res.redirect("back");
     }
   } catch (err) {
+    req.flash('error', err);
     console.log("Error --->  ", err);
   }
 };

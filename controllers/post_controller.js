@@ -12,6 +12,7 @@ module.exports.create = function(req,res){
             console.log("Error in creating the post.");
             return;
         }
+        req.flash('success', 'Post uploaded');
         console.log("Post created -->", post);
         return res.redirect('back');
     })
@@ -43,6 +44,7 @@ module.exports.destroy = async function(req, res){
         if(req.user.id = post.user){
             await Comment.deleteMany({_id:post.comments});
             post.remove();
+            req.flash('success', 'Post deleted');
             return res.redirect('back');
         }else{
             console.log('not authorised');
