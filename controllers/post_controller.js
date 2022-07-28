@@ -17,22 +17,39 @@ module.exports.create = function(req,res){
     })
 }
 
-module.exports.destroy = function(req, res){
-    Post.findById(req.params.id, function(err, post){
+module.exports.destroy = async function(req, res){
+    // Post.findById(req.params.id, function(err, post){
 
-        if(err){
-            console.log("Cannot find post while deleting");
-            return;
-        }
+    //     if(err){
+    //         console.log("Cannot find post while deleting");
+    //         return;
+    //     }
 
-        if(req.user.id == post.user){
-            Comment.deleteMany({_id:post.comments}, function(err){});
+    //     if(req.user.id == post.user){
+    //         Comment.deleteMany({_id:post.comments}, function(err){});
+    //         post.remove();
+    //         return res.redirect('back');
+    //     }else{
+    //         console.log('not authorised');
+    //         return res.redirect('back');
+    //     }
+
+    // });
+
+    ////////////////////////
+    try{
+        let post = await Post.findById(req.params.id);
+
+        if(req.user.id = post.user){
+            await Comment.deleteMany({_id:post.comments});
             post.remove();
             return res.redirect('back');
         }else{
             console.log('not authorised');
             return res.redirect('back');
         }
-
-    });
+    }catch(err){
+        console.log("Error --->  ", err);
+    }
+    
 }

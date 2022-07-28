@@ -47,33 +47,52 @@ module.exports.sign_up = function (req, res) {
   });
 };
 
-module.exports.create = function (req, res) {
+module.exports.create = async function (req, res) {
   console.log("signing up...");
   if (req.body.password != req.body.confirm_password) {
     console.log("Password is not same");
     return res.redirect("back");
   }
 
-  User.findOne({ email: req.body.email }, function (err, user) {
-    if (err) {
-      console.log("Error in finding email while signing up");
-      return;
-    }
+  // User.findOne({ email: req.body.email }, function (err, user) {
+  //   if (err) {
+  //     console.log("Error in finding email while signing up");
+  //     return;
+  //   }
+
+  //   if (!user) {
+  //     User.create(req.body, function (err, user) {
+  //       if (err) {
+  //         console.log("Error in creating user while signing up");
+  //         return;
+  //       }
+  //       console.log("***** user created", user);
+  //       return res.redirect("/users/sign-in");
+  //     });
+  //   } else {
+  //     console.log("User already exist");
+  //     return res.redirect("back");
+  //   }
+  // });
+
+
+  ////////////////////
+  try {
+    let user = await User.findOne({ email: req.body.email });
 
     if (!user) {
-      User.create(req.body, function (err, user) {
-        if (err) {
-          console.log("Error in creating user while signing up");
-          return;
-        }
-        console.log("***** user created", user);
-        return res.redirect("/users/sign-in");
-      });
+      user = await User.create(req.body)
+      console.log("***** user created", user);
+      return res.redirect("/users/sign-in");
+
     } else {
       console.log("User already exist");
       return res.redirect("back");
     }
-  });
+  } catch (err) {
+    console.log("Error --->  ",  err);
+  }
+  
 };
 
 module.exports.create_session = function (req, res) {
