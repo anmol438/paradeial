@@ -35,14 +35,27 @@ module.exports.create = async function (req, res) {
         post: post._id,
       });
 
-      post.comments.push(comment);
+      post.comments.unshift(comment);
       post.save();
+
+      if(req.xhr){
+        return res.status(200).json({
+          data:{
+            comment:comment,
+            comment_user:req.user.name
+          },
+          message:"Comment Added"
+        });
+      }
+
       req.flash('success', 'Comment added');
+      return res.redirect("/");
     }
 
-    return res.redirect("/");
+    
   } catch (err) {
     console.log("Error --->  ", err);
+    return;
   }
 };
 
@@ -76,6 +89,16 @@ module.exports.destroy = async function (req, res) {
         $pull: { comments: comment._id },
       });
       comment.remove();
+
+      if(req.xhr){
+        return res.status(200).json({
+          data:{
+            comment_id:req.params.id,
+          },
+          message:"Comment Deleted"
+        });
+      }
+
       req.flash('success', "Comment deleted");
     } else {
       console.log("Not authorized");
