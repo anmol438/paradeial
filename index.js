@@ -19,6 +19,7 @@ const app = express();
 app.use(express.urlencoded());
 app.use(cookieParser());
 app.use(express.static("./assets"));
+app.use("/uploads", express.static("./uploads"));
 
 app.use(expressLayouts);
 app.set("layout extractStyles", true);

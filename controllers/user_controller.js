@@ -1,5 +1,7 @@
 const User = require("../models/user");
 const passport = require("passport");
+const fs = require('fs');
+const path = require("path");
 
 module.exports.profile = function (req, res) {
   // console.log('******',req.user);
@@ -42,6 +44,9 @@ module.exports.update = async function (req, res) {
           user.email = req.body.email;
 
           if(req.file){
+            if(user.avatar){
+              fs.unlinkSync(path.join( __dirname, '..', user.avatar));
+            }
             user.avatar = User.avatar_path + '/' + req.file.filename;
           }
 
