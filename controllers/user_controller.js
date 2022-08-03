@@ -13,20 +13,52 @@ module.exports.profile = function (req, res) {
   });
 };
 
-module.exports.update = function (req, res) {
+module.exports.update = async function (req, res) {
+  // if (req.user.id == req.query.user_id) {
+  //   User.findByIdAndUpdate(req.query.user_id, req.body, function (err, user) {
+  //     if (err) {
+  //       console.log("Error in updating profile");
+  //       return;
+  //     }
+  //     console.log("Profile Updated");
+  //     req.flash('success', 'Profile updated!')
+  //     return res.redirect("back");
+  //   });
+  // } else {
+  //   return res.status(401).send("Unathorized Access");
+  // }
+
+
   if (req.user.id == req.query.user_id) {
-    User.findByIdAndUpdate(req.query.user_id, req.body, function (err, user) {
-      if (err) {
-        console.log("Error in updating profile");
-        return;
-      }
-      console.log("Profile Updated");
-      req.flash('success', 'Profile updated!')
-      return res.redirect("back");
-    });
+    try {
+      let user = await User.findById(req.query.user_id);
+      // if(user){
+        User.uploaded_avatar(req, res, function(err){
+          if(err){
+            console.log(" Multer Error ---> ", err);
+          }
+
+          user.name = req.body.name;
+          user.email = req.body.email;
+
+          if(req.file){
+            user.avatar = User.avatar_path + '/' + req.file.filename;
+          }
+
+          user.save();
+          return res.redirect("back");
+
+        });
+      // }
+    } catch (error) {
+      req.flash('error', err);
+      return  res.redirect('back');
+    }
   } else {
     return res.status(401).send("Unathorized Access");
   }
+
+
 };
 
 module.exports.sign_in = function (req, res) {
