@@ -2,7 +2,6 @@ const Post = require('../models/post');
 const Comment = require('../models/comment');
 
 module.exports.create = function(req,res){
-    console.log('creating a post...');
 
     Post.create({
         content: req.body.content,
@@ -24,7 +23,6 @@ module.exports.create = function(req,res){
         }
 
         req.flash('success', 'Post uploaded');
-        console.log("Post created -->", post);
         return res.redirect('back');
     })
 }

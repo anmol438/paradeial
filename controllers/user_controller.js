@@ -85,9 +85,7 @@ module.exports.sign_up = function (req, res) {
 };
 
 module.exports.create = async function (req, res) {
-  console.log("signing up...");
   if (req.body.password != req.body.confirm_password) {
-    console.log("Password is not same");
     req.flash('error', 'Password does not match!');
     return res.redirect("back");
   }
@@ -120,11 +118,9 @@ module.exports.create = async function (req, res) {
     if (!user) {
       user = await User.create(req.body);
       req.flash('success', 'Sign Up successfull');
-      console.log("***** user created", user);
       return res.redirect("/users/sign-in");
     } else {
       req.flash('error', "Username already taken");
-      console.log("User already exist");
       return res.redirect("back");
     }
   } catch (err) {
@@ -139,13 +135,11 @@ module.exports.create_session = function (req, res) {
 };
 
 module.exports.destroy_session = function (req, res) {
-  console.log("logging out...");
   req.logout(function (err) {
     if (err) {
       console.log("Error in logging out");
       return;
     }
-    console.log("logged out");
     
   });
   req.flash("success", "You have logged out!");

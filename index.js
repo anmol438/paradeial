@@ -13,7 +13,7 @@ const MongoStore = require("connect-mongodb-session")(session);
 const flash = require('connect-flash');
 const flashMware = require('./config/middleware').setFlash;
 
-const port = 5000;
+const port = process.env.PORT || 5000;
 
 const app = express();
 
@@ -41,7 +41,7 @@ app.use(
     },
     store: new MongoStore(
       {
-        uri: 'mongodb://localhost/codeial-database',
+        uri:process.env.MONGODB_URI || 'mongodb://localhost/codeial-database',
         autoRemove: 'disabled'
         
       },
@@ -49,7 +49,6 @@ app.use(
         if(err){
         console.log('connect-mongo -->', err);
         }
-        console.log("store up...");
       }
     ),
   })
